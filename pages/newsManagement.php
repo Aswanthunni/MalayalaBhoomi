@@ -21,6 +21,7 @@
                 <!-- endinject -->
                 <!-- Layout styles -->
                 <link rel="stylesheet" href="../assets/css/demo_1/style.css">
+                <link rel="stylesheet" href="globalCss/style.css">
                 <!-- End Layout styles -->
                 <link rel="shortcut icon" href="../assets/images/favicon.png" />
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/ui/trumbowyg.min.css" integrity="sha256-iS3knajmo8cvwnS0yrVDpNnCboUEwZMJ6mVBEW1VcSA=" crossorigin="anonymous" />
@@ -38,28 +39,19 @@
         <!-- partial -->
         <div class="main-panel">
           <div id="trumbowyg-demo"></div>
-          <table id="example" class="display" style="width:100%">
+          <div class="pd-10">
+        <table id="example" class="display" style="width:100%">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Extn.</th>
-                <th>Start date</th>
-                <th>Salary</th>
+                <th>News Title</th>
+                <th>Category</th>
+                <th>Created On</th>
+                <th>Updated On</th>
+                <th>Action</th>
             </tr>
         </thead>
-        <tfoot>
-            <tr>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Extn.</th>
-                <th>Start date</th>
-                <th>Salary</th>
-            </tr>
-        </tfoot>
     </table>
+          </div>
           <!-- content-wrapper ends -->
           <!-- partial:partials/_footer.html -->
           <?php include '_footer.php';?>
@@ -87,6 +79,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/plugins/fontfamily/trumbowyg.fontfamily.min.js" integrity="sha256-SoJ+l6AD95Di9rWII0EA6yjCsga+DVXG7tQwec8Ck9Y=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/plugins/fontsize/trumbowyg.fontsize.min.js" integrity="sha256-gPWGxyYlpMJdV/5xLl32fLNjlP7MFZI745LNpvn/g6E=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://kit.fontawesome.com/7b6d182013.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
       $('#trumbowyg-demo').trumbowyg({
     btns: [
@@ -109,29 +103,49 @@
     </script>
 
     <script>
-//       $.ajax({
-//    url: 'https://jsonplaceholder.typicode.com/todos/1',
-//    type: 'GET',
-//    success: function (result) {
-//     <?php $result = result ;
-//     echo $result;
-//     ?>
-//    }
-// });
 $(document).ready(function() {
-    $('#example').DataTable( {
-        "ajax": "https://api.myjson.com/bins/1gjs46",
-        "columns": [
-            { "data": "name" },
-            { "data": "position" },
-            { "data": "office" },
-            { "data": "extn" },
-            { "data": "start_date" },
-            { "data": "salary" }
-        ]
+    var editIcon = function ( data, type, row ) {
+        if ( type === 'display' ) {
+            data === undefined ? data = '' : data = data;
+            return ' <i class="fa fa-pencil"></i>' + '<i class="fa fa-trash mrl-1r red cursor-point" onclick="showAlert('+data+')"></i>';
+        }
+        return data;
+    };
+
+    $('#example').DataTable({
+        dom: "Bfrtip",
+        ajax: "https://api.myjson.com/bins/1gjs46",
+        columns: [
+            { data: "name" },
+            { data: "position"},
+            { data: "office"},
+            { data: "start_date"},
+            { data: "id", render: editIcon }
+        ],
     } );
 } );
     </script>
+
+    <script>
+  function showAlert(data) {
+  swal({
+  title: "Are you sure?",
+  text: "Once deleted, you will not be able to recover this imaginary file!",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    swal("Poof! Your imaginary file has been deleted!", {
+      icon: "success",
+    });
+  } else {
+    swal("Your imaginary file is safe!");
+  }
+});
+      }
+     </script> 
     <!-- End custom js for this page-->
   </body>
 </html>
